@@ -10,7 +10,7 @@ import shutil
 from flask_cors import CORS
 
 # os.environ['OPENAI_API_KEY'] = 'key-here'
-os.environ['OPENAI_API_KEY'] = "key here"
+os.environ['OPENAI_API_KEY'] = "your API key"
 
 root = os.path.dirname(__file__)
 
@@ -36,7 +36,7 @@ def hello_world():
         
 
 
-@app.route('/api/addContext', methods=['POST'])
+@app.route('/api/addFile', methods=['POST'])
 def add_context():
     if request.method == 'POST':
         print ('reached---------------------------')
