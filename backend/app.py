@@ -10,7 +10,7 @@ import shutil
 from flask_cors import CORS
 
 # os.environ['OPENAI_API_KEY'] = 'key-here'
-os.environ['OPENAI_API_KEY'] = "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"
+os.environ['OPENAI_API_KEY'] = "key here"
 
 root = os.path.dirname(__file__)
 
