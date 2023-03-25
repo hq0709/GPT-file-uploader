@@ -1,39 +1,28 @@
 import { useState, useRef, useEffect } from "react";
 import DocumentSVG from "../../img/document.svg";
 import RefreshImg from "../../img/RefreshSVG.svg";
-import axios from "axios";
+import axios from "axios"; // 与后端API交互
 
 export default function Body() {
-  const [dragActive, setDragActive] = useState<boolean>(false);
+  // 状态变量
+  const [dragActive, setDragActive] = useState<boolean>(false); //文件拖拽
   const inputRef = useRef<any>(null);
   const chatRef = useRef<any>(null);
-  const [files, setFiles] = useState<any>([]);
-  const [uploadError, setUploadError] = useState("");
-  const [userMessage, setUserMessage] = useState("");
-  const [disableChat, setDisableChat] = useState(true);
-  const [disableUpload, setDisableUpload] = useState(false);
-  const [responseLoading, setResponseLoading] = useState(false);
+  const [files, setFiles] = useState<any>([]); // 存储上传的文件
+  const [uploadError, setUploadError] = useState(""); // 上传文件错误信息
+  const [userMessage, setUserMessage] = useState(""); // 用户输入的信息
+  const [disableChat, setDisableChat] = useState(true); // 禁用和启用聊天框
+  const [disableUpload, setDisableUpload] = useState(false); // 禁用和启用上传文件
+  const [responseLoading, setResponseLoading] = useState(false); // AI是否正在加载
+  const [chats, setChats] = useState<any[]>([]); // 存储聊天记录
 
-  // const [chats, setChats] = useState([
-  //   { sender: "user", message: "When did I spend the most?" },
-  //   {
-  //     sender: "AI",
-  //     message:
-  //       "According to your document, you spent the most on 4th April with an amount of GHC 5000",
-  //   },
-  //   { sender: "user", message: "How much did I spend on 16 March." },
-  //   { sender: "AI", message: "On 16th March you spent nothing." },
-  //   { sender: "user", message: "Can you summarize my statement for me?" },
-  // ]);
-
-  const [chats, setChats] = useState<any[]>([]);
-
+  // 随消息发送移动窗口
   useEffect(() => {
     chatRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [chats]);
 
+  // 清除聊天记录
   function clearChat() {
-    // setChats([]);
     localStorage.clear();
     setDisableChat(true);
     setDisableUpload(false);
@@ -42,10 +31,9 @@ export default function Body() {
       ...prevChats,
       {
         sender: "AI",
-        message: "Context has been cleared",
+        message: "File has been cleared",
       },
     ]);
-    // window.location.reload();
   }
 
   function reset() {
@@ -54,16 +42,9 @@ export default function Body() {
     setDisableChat(true);
     setDisableUpload(false);
     setFiles([]);
-    // setChats((prevChats: any) => [
-    //   ...prevChats,
-    //   {
-    //     sender: "AI",
-    //     message: "Context has been cleared",
-    //   },
-    // ]);
     window.location.reload();
   }
-
+  // 拖拽文件上传功能
   function handleDragOver(e: any) {
     e.preventDefault();
     e.stopPropagation();
@@ -85,10 +66,9 @@ export default function Body() {
   function handleDrop(e: any) {
     e.preventDefault();
     e.stopPropagation();
-    console.log("Dropped!!!!");
+    console.log("Dropped!!!");
     setDragActive(false);
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      // handleFiles(e.dataTransfer.files);
       console.log(e.dataTransfer.files);
       for (let i = 0; i < e.dataTransfer.files["length"]; i++) {
         setFiles((prevState: any) => [...prevState, e.dataTransfer.files[i]]);
@@ -100,7 +80,6 @@ export default function Body() {
     e.preventDefault();
     console.log("File has been added");
     if (e.target.files && e.target.files[0]) {
-      // handleFiles(e.target.files);
       console.log(e.target.files);
       for (let i = 0; i < e.target.files["length"]; i++) {
         setFiles((prevState: any) => [...prevState, e.target.files[i]]);
@@ -115,10 +94,10 @@ export default function Body() {
     setFiles([]);
     setFiles(newArr);
   }
-
+  // 处理上传的文件
   function handleSubmitFile(e: any) {
     if (files.length === 0) {
-      setUploadError("No file has been selected");
+      setUploadError("No file has been uploaded.");
       return;
     }
     setChats((prevChats: any) => [
@@ -138,12 +117,10 @@ export default function Body() {
     }
 
     console.log(data);
-
+    // post请求到后端
     axios
-      .post("http://127.0.0.1:5000/api/addContext", data, {
-        // withCredentials: true,
+      .post("http://127.0.0.1:5000/api/addFile", data, {
         headers: {
-          // "Access-Control-Allow-Origin": "*",
           "Content-Type": "multipart/form-data",
         },
       })
@@ -152,14 +129,13 @@ export default function Body() {
         localStorage.setItem("indexKey", res.data);
         setFiles([]);
         setDisableChat(false);
-        setTimeout(clearChat, 300000);
-        // setTimeout(clearChat, 5000);
+        // setTimeout(clearChat, 300000); // 5 mins delete file
         setChats((prevChats: any) => [
           ...prevChats,
           {
             sender: "AI",
             message:
-              "Context has been uploaded. Ask away!! NB: Session will expire after 5 mins.",
+              "File has been uploaded. Please ask your question!",
           },
         ]);
       })
@@ -171,21 +147,20 @@ export default function Body() {
           {
             sender: "AI",
             message:
-              "Sorry something went wrong. Try again later or restart context",
+              "Sorry something went wrong. Try again later or restart upload.",
           },
         ]);
       });
   }
 
   function handleSend() {
-    // localStorage.setItem("indexKey", "3580a917-c353-11ed-9225-20c19bff2da4");
     if (localStorage.getItem("indexKey") === null) {
       setChats((prevChats: any) => [
         ...prevChats,
         {
           sender: "AI",
           message:
-            "Chat context has expired after 5 mins. Clear context and upload new files.",
+            "File is expired after 5 mins. Please upload new files.",
         },
       ]);
       return;
@@ -222,10 +197,7 @@ export default function Body() {
         })
         .catch((err) => {
           setResponseLoading(false);
-          // alert("Something went wrong");
-          // console.log(err);
-          // console.log(err.response.data);
-          // console.log(err.response.status);
+
           setChats((prevState: any) => [
             ...prevState,
             {
@@ -238,7 +210,6 @@ export default function Body() {
     }
   }
 
-  // triggers the input when the button is clicked
   const onButtonClick = () => {
     inputRef.current.value = "";
     inputRef.current.click();
