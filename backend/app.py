@@ -6,17 +6,13 @@ import uuid
 import threading
 import time
 import shutil
-
 from flask_cors import CORS
 
-# os.environ['OPENAI_API_KEY'] = 'key-here'
-os.environ['OPENAI_API_KEY'] = "your api key"
-
+os.environ['OPENAI_API_KEY'] = "your api key" # 修改为你的api key
 root = os.path.dirname(__file__)
-
 app = Flask(__name__)
 CORS(app)
-app.config['DEBUG'] = True
+app.config['DEBUG'] = True # 开启debug模式
 
 
 def delete_context(dirName):
@@ -28,32 +24,15 @@ def delete_context(dirName):
         
     return 'completed'
 
-
 @app.route("/")
 def hello_world():
     # print (os.environ['OPENAI_API_KEY'])
     return "<p>The Flask API route for GPTContext</p>"
-        
-
 
 @app.route('/api/addFile', methods=['POST'])
 def add_context():
     if request.method == 'POST':
-        print ('reached---------------------------')
-        
-        # sending from postman
-        # try:
-        #     files = request.files.getlist('file')
-        #     indexKey = str(uuid.uuid1())
-        #     dirName = os.path.join('./uploads/', indexKey)
-        #     os.makedirs(dirName)
-            
-        #     for file in files:
-        #         filename = file.filename
-        #         new_filename = os.path.join(dirName,secure_filename(filename))
-        #         file.save(new_filename)   
-
-            
+        print ('reached---------------------------')          
         # 上传文件并且作为一个json文件储存到uploads文件夹下
         try:
             indexKey = str(uuid.uuid1())
@@ -95,7 +74,7 @@ def add_context():
             response = make_response('Could not upload files')
             response.status_code = 500
             return response           
-    
+
 @app.route('/api/getResponse', methods=['POST'])
 def get_response():
     if request.method == 'POST':
@@ -137,7 +116,7 @@ def get_response():
             
             
         
-
+# 删除所有的文件
 @app.route('/api/deleteAllContext', methods=['DELETE'])
 def deleteAllContext():
     if request.method == 'DELETE':

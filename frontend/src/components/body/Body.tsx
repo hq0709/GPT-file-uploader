@@ -117,7 +117,7 @@ export default function Body() {
     }
 
     console.log(data);
-    // post请求到后端
+    // post请求到后端，如果更换服务器地址，应该对应修改这个网址
     axios
       .post("http://127.0.0.1:5000/api/addFile", data, {
         headers: {
@@ -129,7 +129,7 @@ export default function Body() {
         localStorage.setItem("indexKey", res.data);
         setFiles([]);
         setDisableChat(false);
-        // setTimeout(clearChat, 300000); // 5 mins delete file
+        // setTimeout(clearChat, 300000); // 5分钟删除上传的文件
         setChats((prevChats: any) => [
           ...prevChats,
           {
@@ -178,11 +178,10 @@ export default function Body() {
       data.append("prompt", prompt);
       data.append("indexKey", indexKey);
       console.log(data);
+      // post请求到后端，如果更换服务器地址，应该对应修改这个网址
       axios
         .post("http://127.0.0.1:5000/api/getResponse", data, {
-          // withCredentials: true,
           headers: {
-            // "Access-Control-Allow-Origin": "*",
             "Content-Type": "multipart/form-data",
           },
         })
@@ -203,7 +202,7 @@ export default function Body() {
             {
               sender: "AI",
               message:
-                "Sorry something went wrong. Try again later or restart context",
+                "Sorry something went wrong. Try again later or restart.",
             },
           ]);
         });
@@ -243,18 +242,10 @@ export default function Body() {
             <span className="font-bold text-[#3038b0]" onClick={onButtonClick}>
               Choose file
             </span>{" "}
-            <p className="text-[#c6392b]">(.pdf, .docx, .txt)</p>
+            <p className="text-[#c6392b]">(txt/doc/docx/pdf)</p>
             to upload
           </span>
         </label>
-        {/* {dragActive && (
-            <div
-              onDragEnter={handleDragEnter}
-              onDragLeave={handleDragLeave}
-              onDragOver={handleDragOver}
-              onDrop={handleDrop}
-            ></div>
-          )} */}
         <br></br>
         <button
           className={`${
@@ -282,7 +273,6 @@ export default function Body() {
       </form>
       <div className="flex flex-col md:w-[60%] lg:w-[60%] w-[100%]  h-[100vh]">
         <div className="rounded-lg mt-3 w-full h-full p-4 border border-[#ebebeb] flex flex-col justify-end overflow-y-auto">
-          {/* <div className="rounded-lg mt-3 w-full h-full p-4 border border-[#ebebeb] flex flex-col justify-end "> */}
           {chats.length > 0 ? (
             <div className="flex flex-col overflow-y-auto">
               <div className="flex flex-col space-y-4">
@@ -313,12 +303,10 @@ export default function Body() {
               )}
             </div>
           ) : (
-            // </div>
             <div className="flex justify-center mt-[10%]">
-              <span className="text-[#bababa]">No chats yet</span>
+              <span className="text-[#bababa]">Please upload your file first.</span>
             </div>
           )}
-          {/* </div> */}
         </div>
 
         <input
@@ -333,10 +321,15 @@ export default function Body() {
             <button onClick={reset}>
               <img alt="refresh-logo" src={RefreshImg} className="w-4 h-4" />
             </button>
-            <span className="text-[#949494] italic text-[12px]">
+            {
+              /**
+               * 当启用五分钟删除上传的文件的功能时，取消注释下面的代码
+               */
+            }
+            {/* <span className="text-[#949494] italic text-[12px]">
               Session will expire 5 minutes after creation <br></br>
               This is to control any high demand / no. of requests.
-            </span>
+            </span> */}
           </div>
           <button
             className={`${
@@ -344,7 +337,6 @@ export default function Body() {
             }  p-2 rounded-md h-10 w-28`}
             onClick={handleSend}
             disabled={disableChat}
-            // disabled={false}
           >
             <span className="text-white">Send</span>
           </button>
