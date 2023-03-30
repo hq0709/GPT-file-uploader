@@ -8,7 +8,7 @@ import time
 import shutil
 from flask_cors import CORS
 
-os.environ['OPENAI_API_KEY'] = "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" # 修改为你的api key
+os.environ['OPENAI_API_KEY'] = "your api key" # 修改为你的api key
 root = os.path.dirname(__file__)
 app = Flask(__name__)
 CORS(app)
