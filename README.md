@@ -53,12 +53,12 @@ npm start
 > [Welcome to LlamaIndex 🦙 (GPT Index)! — LlamaIndex documentation (gpt-index.readthedocs.io)](https://gpt-index.readthedocs.io/en/latest/)
 > 
 
-**`llama_index`** 是一个GitHub项目，旨在提供一个简单的方法来利用OpenAI GPT系列模型（例如GPT-3）对一组文档进行索引和查询。该项目的核心思想是将文档编码为向量，然后在查询时与GPT模型的输出进行相似度比较。这个方法的目标是更高效地利用GPT模型的能力，减少API调用次数，从而降低成本。
+`llama_index` 是一个GitHub项目，旨在提供一个简单的方法来利用OpenAI GPT系列模型（例如GPT-3）对一组文档进行索引和查询。该项目的核心思想是将文档编码为向量，然后在查询时与GPT模型的输出进行相似度比较。这个方法的目标是更高效地利用GPT模型的能力，减少API调用次数，从而降低成本。
 
-**`llama_index`** 的主要组件包括：
+`llama_index` 的主要组件包括：
 
-1. **`GPTSimpleVectorIndex`** 类：这个类提供了一个简单的索引结构，用于存储文档向量及其对应的元数据。它包含用于向量化文档、计算文档间相似度、查询文档等的方法。
-2. 数据加载器：用于从不同来源加载文档，如文件、URL或其他数据结构。在这个项目中，提供了一个名为 **`SimpleDirectoryReader`**的数据加载器，它可以从一个包含文本文件的目录中加载文档。
+1. `GPTSimpleVectorIndex` 类：这个类提供了一个简单的索引结构，用于存储文档向量及其对应的元数据。它包含用于向量化文档、计算文档间相似度、查询文档等的方法。
+2. 数据加载器：用于从不同来源加载文档，如文件、URL或其他数据结构。在这个项目中，提供了一个名为 `SimpleDirectoryReader`的数据加载器，它可以从一个包含文本文件的目录中加载文档。
 
 在这个项目中，选择使用LlamaIndex主要有以下几个原因：
 
