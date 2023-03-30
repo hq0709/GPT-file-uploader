@@ -315,6 +315,12 @@ export default function Body() {
           type="textarea"
           value={userMessage}
           onChange={(e) => setUserMessage(e.target.value)}
+          onKeyDown={(e) => { // 增加了回车发送消息的功能
+            if (e.key === "Enter" && !e.shiftKey) {
+              e.preventDefault();
+              handleSend();
+            }
+          }}          
         ></input>
         <div className="flex flex-row mt-2 justify-between">
           <div className="flex flex-row space-x-4 items-center">
